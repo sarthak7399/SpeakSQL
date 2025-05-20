@@ -3,7 +3,7 @@
 ---
 
 ## 🧾 About 
-Convert natural language questions into SQL queries using GenAI. Powered by Google PaLM, HuggingFace models, and Streamlit UI, backed by ChromaDB and MySQL.
+Convert natural language questions into SQL queries using GenAI. Powered by Mistral via Ollama, HuggingFace models, and Streamlit UI, backed by ChromaDB and MySQL.
 
 ---
 
@@ -12,6 +12,6 @@ Convert natural language questions into SQL queries using GenAI. Powered by Goog
 
 This version is tailored for a **small retail t-shirt store**, helping store managers and staff analyse their business without needing SQL knowledge. From tracking inventory levels to viewing best-selling designs, Ask2SQL provides instant answers.
 
-The app leverages **Google PaLM API** or **HuggingFace Transformers** for natural language understanding, **ChromaDB** for storing schema embeddings and contextual memory, and **MySQL** as the backend database storing retail sales data. The frontend is built using **Streamlit** for a lightweight and responsive user interface.
+The app leverages **Mistral 7B (running locally via Ollama)** or **HuggingFace Transformers** for natural language understanding, **ChromaDB** for storing schema embeddings and contextual memory, and **MySQL** as the backend database storing retail sales data. The frontend is built using **Streamlit** for a lightweight and responsive user interface.
 
 It is ideal for small business owners, sales analysts, or support staff to interact with their data effortlessly using plain English.
