@@ -22,7 +22,7 @@ It is ideal for small business owners, sales analysts, or support staff to inter
 
 ### 🔧 1. Create a Virtual Environment
 ```bash
-python -m venv SpeakSQLenv
+python3 -m venv SpeakSQLenv
 source SpeakSQLenv/bin/activate   # On Linux/Mac
 SpeakSQLenv\Scripts\activate      # On Windows
 ```
