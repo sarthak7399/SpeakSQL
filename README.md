@@ -25,6 +25,7 @@ It is ideal for small business owners, sales analysts, or support staff to inter
 python3 -m venv SpeakSQLenv
 source SpeakSQLenv/bin/activate   # On Linux/Mac
 SpeakSQLenv\Scripts\activate      # On Windows
+deactivate # To deactivate the virtual environment
 ```
 
 ### 📦 2. Install Dependencies
@@ -56,7 +57,13 @@ ollama pull mistral
 ```
 Ollama will serve Mistral locally at http://localhost:11434
 
-### 📝 Notes
+### 🧪 6. Running the Jupyter Notebook Code
+Activate your virtual environment before starting Jupyter, and run the below command.
+```bash
+jupyter-notebook
+```
+
+### 📝 Points to be noted
 
 1. Ensure MySQL service is running before executing queries.
 2. Ideal for Linux/WSL setups. For Windows, WSL is recommended.
