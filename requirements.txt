@@ -1,0 +1,10 @@
+langchain
+jupyter
+langchain_community
+python-dotenv
+google-genai
+pymysql
+cryptography
+langchain_experimental
+langchain-ollama
+ipykernel
