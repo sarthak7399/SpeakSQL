@@ -41,23 +41,14 @@ sudo systemctl start mysql
 sudo mysql_secure_installation
 ```
 ✅ Create a MySQL database and table manually or via SQL script from path '''../Database/create_db.sql'''. Make sure to note DB name, user, password, host, and port.
+```sql
+mysql -u root -p noicee_tshirts < ../Database/create_db.sql
+```
 
 ### 🔐 4. Setup .env File
-Please refer to .env.example. After putting the keys, please remove .example from the file name.
+Please refer to .env.example. After putting the keys, please remove .example from the file name. Ensure you include your GOOGLE_API_KEY.
 
-### 🤖 5. Install & Setup Ollama with Mistral
-🧱 Install Ollama (One-time)
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-⬇️ Pull Mistral Model (approx 4.1 GB)
-```bash
-ollama pull mistral
-```
-Ollama will serve Mistral locally at http://localhost:11434
-
-### 🧪 6. Running the Jupyter Notebook Code
+### 🧪 5. Running the Jupyter Notebook Code
 Activate your virtual environment before starting Jupyter, and run the below command.
 ```bash
 jupyter-notebook
