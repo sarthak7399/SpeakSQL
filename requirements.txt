@@ -6,5 +6,5 @@ google-genai
 pymysql
 cryptography
 langchain_experimental
-langchain-ollama
 ipykernel
+google-generativeai
