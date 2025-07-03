@@ -8,3 +8,6 @@ cryptography
 langchain_experimental
 ipykernel
 google-generativeai
+langchain-huggingface
+sentence-transformers
+chromadb
