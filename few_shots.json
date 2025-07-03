@@ -1,0 +1,56 @@
+[
+    {
+        "Question": "How many tshirts do we have left for Nike in extra small size and red colour?",
+        "SQLQuery": "SELECT SUM(stock_quantity) FROM t_shirts WHERE brand = 'Nike' AND size = 'XS' AND color = 'Red';",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "83"
+    },
+    {
+        "Question": "How much is the price of inventory for all small sized tshirts?",
+        "SQLQuery": "SELECT SUM(price * stock_quantity) FROM t_shirts WHERE size = 'S';",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "13924"
+    },
+    {
+        "Question": "If we have to sell all the Levi's tshirt with discounts applied. How much revenue will our store generate? (post discounts)",
+        "SQLQuery": "SELECT SUM(a.Total_Amount * ((100- COALESCE(discounts.pct_discount, 0))/100)) as Total_Revenue FROM (SELECT SUM(price*stock_quantity) as Total_Amount, t_shirt_id from t_shirts \tWHERE brand = 'Levi' \tGROUP BY t_shirt_id) a LEFT JOIN discounts  ON a.t_shirt_id = discounts.t_shirt_id",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "30972.450000"
+    },
+    {
+        "Question": "If we have to sell all the Levi's tshirt today. How much revenue will our store generate?",
+        "SQLQuery": "SELECT SUM(t_shirts.price * t_shirts.stock_quantity) FROM t_shirts WHERE t_shirts.brand = 'Levi'; ",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "32170"
+    },
+    {
+        "Question": "How many White coloured Levi's tshirts do we have in each size?",
+        "SQLQuery": "SELECT SUM(stock_quantity) FROM t_shirts WHERE brand = 'Levi' AND color = 'White'; ",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "369"
+    },
+    {
+        "Question": "How many Adidas t-shirts are available in total?",
+        "SQLQuery": "SELECT SUM(stock_quantity) FROM t_shirts WHERE brand = 'Adidas';",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "758"
+    },
+    {
+        "Question": "What is the total inventory value of all black coloured t-shirts?",
+        "SQLQuery": "SELECT SUM(price * stock_quantity) FROM t_shirts WHERE color = 'Black';",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "22275"
+    },
+    {
+        "Question": "How many Van Huesen t-shirts do we have in medium size?",
+        "SQLQuery": "SELECT SUM(stock_quantity) FROM t_shirts WHERE brand = 'Van Huesen' AND size = 'M';",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "89"
+    },
+    {
+        "Question": "What is the total revenue if we sell all Adidas t-shirts with discounts applied?",
+        "SQLQuery": "SELECT SUM(a.Total_Amount * ((100 - COALESCE(discounts.pct_discount, 0)) / 100)) AS Total_Revenue FROM (SELECT SUM(price * stock_quantity) AS Total_Amount, t_shirt_id        FROM t_shirts        WHERE brand = 'Adidas'       GROUP BY t_shirt_id) a LEFT JOIN discounts  ON a.t_shirt_id = discounts.t_shirt_id;",
+        "SQLResult": " Result of the SQL Query - ",
+        "Answer": "19887.250000"
+    }
+]
