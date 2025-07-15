@@ -11,3 +11,6 @@ google-generativeai
 langchain-huggingface
 sentence-transformers
 chromadb
+langchain-google-genai
+langsmith
+langchain-community
