@@ -4,22 +4,22 @@ USE noicee_tshirts;
 
 -- Create the t_shirts table
 CREATE TABLE t_shirts (
-    t_shirt_id INT AUTO_INCREMENT PRIMARY KEY,
-    brand ENUM('Van Huesen', 'Levi', 'Nike', 'Adidas') NOT NULL,
-    color ENUM('Red', 'Blue', 'Black', 'White') NOT NULL,
-    size ENUM('XS', 'S', 'M', 'L', 'XL') NOT NULL,
-    price INT CHECK (price BETWEEN 10 AND 50),
-    stock_quantity INT NOT NULL,
+    t_shirt_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique ID for each t-shirt entry',
+    brand ENUM('Van Huesen', 'Levi', 'Nike', 'Adidas') NOT NULL COMMENT 'Brand of the t-shirt',
+    color ENUM('Red', 'Blue', 'Black', 'White') NOT NULL COMMENT 'Color of the t-shirt',
+    size ENUM('XS', 'S', 'M', 'L', 'XL') NOT NULL COMMENT 'Size of the t-shirt',
+    price INT CHECK (price BETWEEN 10 AND 50) COMMENT 'Price in arbitrary units, between 10 and 50',
+    stock_quantity INT NOT NULL COMMENT 'Number of items available in stock',
     UNIQUE KEY brand_color_size (brand, color, size)
-);
+) COMMENT = 'Table storing t-shirt product information';
 
 -- Create the discounts table
 CREATE TABLE discounts (
-    discount_id INT AUTO_INCREMENT PRIMARY KEY,
-    t_shirt_id INT NOT NULL,
-    pct_discount DECIMAL(5,2) CHECK (pct_discount BETWEEN 0 AND 100),
+    discount_id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique ID for each discount entry',
+    t_shirt_id INT NOT NULL COMMENT 'Foreign key referencing the t-shirt being discounted',
+    pct_discount DECIMAL(5,2) CHECK (pct_discount BETWEEN 0 AND 100) COMMENT 'Discount percentage (0-100)',
     FOREIGN KEY (t_shirt_id) REFERENCES t_shirts(t_shirt_id)
-);
+) COMMENT = 'Table storing discount information for t-shirts';
 
 -- Create a stored procedure to populate the t_shirts table
 DELIMITER $$
