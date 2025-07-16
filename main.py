@@ -1,44 +1,74 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from Modules.loadDatabase import initialize_database
-from Modules.loadSQLChain import initialize_sql_database_chain
-from Modules.loadEmbeddings import initialize_huggingface_embeddings, setup_vectorstore_and_selector
-from Modules.loadFewShots import load_few_shot_examples
-from Modules.loadVariables import load_environment_variables
-from Modules.setupPromptTemplate import setup_few_shot_prompt_template # New import for Decimal type handling
+import streamlit as st
+import os
+import sys
 
-# Load environment variables for Google Generative AI
-env_vars = load_environment_variables()
+# Add the parent directory to the Python path to allow importing from speakSQL.py
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-GOOGLE_API_KEY = env_vars.get('GOOGLE_API_KEY')
+# --- Import the main chain initialization function ---
+try:
+    from speakSQL import get_few_shot_sql_chain
+except ImportError as e:
+    st.error(f"🚨 Setup Error: Could not load the core SpeakSQL logic. Details: {e}")
+    st.info("💡 Please ensure 'speakSQL.py' is in the same directory and all its internal modules are correctly imported.")
+    st.stop()
 
-# Initialize Google Generative AI LLM
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0, google_api_key=GOOGLE_API_KEY) 
+# --- Cache the SQL chain initialization for performance ---
+@st.cache_resource
+def load_chain_once():
+    """Loads and caches the SQLDatabaseChain to run only once."""
+    try:
+        chain = get_few_shot_sql_chain()
+        return chain
+    except Exception as e:
+        st.error(f"❌ Initialization Failed: Cannot connect to database or load AI model. Error: {e}")
+        st.info("🔍 Double-check your `.env` file, database connection, and Google API key.")
+        st.stop()
 
-# Load environment variables for database
-db_user = env_vars.get('db_user')
-db_password = env_vars.get('db_password')
-db_host = env_vars.get('db_host')
-db_port = env_vars.get('db_port')
-db_name = env_vars.get('db_name')
-# Initialize MySQL Database
-db, database_schema = initialize_database(db_user, db_password, db_host, db_port, db_name, wanna_print=False)
+# --- Load the chain ---
+sql_chain = load_chain_once()
 
-# Initialize few-shot examples and HuggingFace embeddings
-few_shot_examples = load_few_shot_examples()
+# --- Streamlit App UI ---
+st.set_page_config(page_title="SpeakSQL 🤖", layout="centered")
 
-# Initialize the embeddings
-embeddings = initialize_huggingface_embeddings()
+st.title("🗣️ SpeakSQL")
+st.markdown("""
+Unleash the power of AI to query your database with plain English!
+Type your question below and hit 'Ask' or simply press **Enter**! 🚀
+""")
 
-# Setup vector store and example selector
-example_selector = setup_vectorstore_and_selector(few_shot_examples, embeddings, k_examples=2)
+# --- Use st.form to enable Enter key submission ---
+with st.form(key='sql_query_form'):
+    user_question = st.text_input("❓ Your Question:", placeholder="e.g., How many Nike t-shirts are in stock for size M and color blue?")
+    submit_button = st.form_submit_button("Ask 💬")
 
-# Setup few-shot prompt
-few_shot_prompt = setup_few_shot_prompt_template(example_selector)
+# Check if the form was submitted (either by button click or Enter key)
+if submit_button:
+    if user_question:
+        with st.spinner("Processing your request... ⏳"):
+            try:
+                response = sql_chain.invoke({"query": user_question})
 
-# Initialize SQLDatabaseChain
-sql_chain = initialize_sql_database_chain(llm, db, few_shot_prompt, verbose=True)
+                st.subheader("✅ Answer:")
+                if isinstance(response, dict) and 'result' in response:
+                    st.success(response['result'])
+                else:
+                    st.success(response)
 
+                st.success("Query successful!")
 
-q1 = "How many tshirts do we have left for Nike in small size and red colour?"
-response1 = sql_chain.invoke(q1)
-print(response1)
+            except Exception as e:
+                error_message = str(e)
+                st.error(f"💥 Query Failed: {error_message}")
+
+                if "quota" in error_message.lower() or "resourceexhausted" in error_message.lower():
+                    st.warning("⚠️ API Quota Exceeded! Please wait a while or consider upgrading your Google Gemini plan.")
+                elif "mysql" in error_message.lower() or "database" in error_message.lower():
+                    st.warning("⚠️ Database Error: Check your database connection details or the generated SQL query for issues.")
+                else:
+                    st.warning("🧐 An unexpected error occurred. Check the terminal for detailed logs.")
+    else:
+        st.warning("✍️ Please type your question before clicking 'Ask' or pressing Enter!")
+
+st.markdown("---")
+st.markdown("✨ Powered by Google Gemini, LangChain, and HuggingFace Embeddings.")
