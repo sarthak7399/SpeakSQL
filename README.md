@@ -7,6 +7,8 @@ Convert natural language questions into SQL queries using GenAI. Powered by Mist
 
 ---
 
+![Working ScreenShot](<Assets/Images/WorkingScreenShot.png>)
+
 ## 📘 Description
 **SpeakSQL** is an intelligent GenAI-powered tool that takes basic user questions like *“How many tshirts do we have left for Nike in extra small size and red colour?”* etc and converts them into valid SQL queries.
 
